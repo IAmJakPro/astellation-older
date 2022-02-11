@@ -3,10 +3,6 @@ import mongoose, { mongo } from 'mongoose';
 
 const { Schema, model } = mongoose;
 
-export interface IUser {
-  name: String;
-}
-
 @injectable()
 export default class UserSchema {
   getSchema() {

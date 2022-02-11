@@ -10,7 +10,6 @@ import {
 } from 'inversify-express-utils';
 import { inject } from 'inversify';
 import { Request, Response } from 'express';
-import User, { IUser } from '../model/user';
 import { UserService } from '../services/user';
 import TYPES from '../constants/types';
 import * as express from 'express';
