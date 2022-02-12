@@ -6,6 +6,8 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { container } from '../utils/container';
+import passport from 'passport';
+//import session from 'express-session';
 
 @injectable()
 export default class App {
@@ -15,9 +17,9 @@ export default class App {
     process.env.NODE_ENV || 'development';
 
   constructor(@inject(TYPES.MongoDbConnect) mongoDbConnect: MongoDBConnect) {
-    this._app = new InversifyExpressServer(container, null, {
+    this._app = new InversifyExpressServer(container/* , null, {
       rootPath: '/api',
-    });
+    } */);
     this._mongoDbConnect = mongoDbConnect;
   }
 
@@ -32,6 +34,17 @@ export default class App {
         })
       );
       app.use(express.json());
+
+      /* app.use(
+        session({
+          secret: process.env.JWT_SERCRET,
+          resave: false,
+          saveUninitialized: true,
+        })
+      ); */
+
+      app.use(passport.initialize());
+      //app.use(passport.session());
     });
 
     let app = this._app.build();

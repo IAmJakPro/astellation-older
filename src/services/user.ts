@@ -1,8 +1,11 @@
 import { inject, injectable } from 'inversify';
-import User from '../model/user';
+import UserSchema, {
+  ICreateUserRequest,
+  IUserEntity,
+  IUserModel,
+} from '../model/user';
 import TYPES from '../constants/types';
-import UserSchema from '../model/user';
-import { Model } from 'mongoose';
+import { Model, Document } from 'mongoose';
 
 @injectable()
 export class UserService {
@@ -12,13 +15,23 @@ export class UserService {
     this._userSchema = userSchema.getSchema();
   }
 
-  async getUsers(): Promise<User[]> {
-    const users: User[] = await this._userSchema.find({});
+  async getUsers(): Promise<IUserModel[]> {
+    const users: IUserModel[] = await this._userSchema.find({});
     return users;
   }
 
-  async createUser(user: User): Promise<User> {
+  async getUserByEmail(email: string): Promise<IUserModel> {
+    const user: IUserModel = await this._userSchema.findOne({ email: email });
+    return user;
+  }
+
+  async createUser(user: ICreateUserRequest): Promise<IUserModel> {
     const insertedUser = await this._userSchema.create(user);
-    return insertedUser as unknown as User;
+    return insertedUser as unknown as IUserModel;
+  }
+
+  async getUserById(id: string): Promise<IUserModel> {
+    const user: IUserModel = await this._userSchema.findById(id);
+    return user;
   }
 }
